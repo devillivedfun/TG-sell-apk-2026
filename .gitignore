@@ -1,0 +1,35 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment and secrets
+.env
+.env.local
+*.env
+
+# SQLite local databases (legacy / local)
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/*.db-journal
+*.sqlite
+
+# Application artifacts & storage
+# Note: storage/NyxGram.apk (or configured APK) is tracked for Vercel deployment
+!storage/*.apk
+!storage/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Vercel output
+.vercel
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
