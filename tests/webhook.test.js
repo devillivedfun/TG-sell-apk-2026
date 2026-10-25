@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import indexHandler from '../api/index.js';
 import healthHandler from '../api/health.js';
 import telegramHandler from '../api/telegram.js';
 import * as dbModule from '../src/database/connection.js';
@@ -10,6 +11,38 @@ describe('Vercel Serverless Endpoints', () => {
   beforeEach(() => {
     mockDb = createMockDb();
     vi.spyOn(dbModule, 'getDatabase').mockResolvedValue(mockDb);
+  });
+
+  describe('/ (index) endpoint', () => {
+    it('serves HTML landing page with bot name and logo', async () => {
+      let statusCode = 0;
+      let responseBody = '';
+      let contentType = '';
+
+      const req = { method: 'GET' };
+      const res = {
+        setHeader(name, value) {
+          if (name.toLowerCase() === 'content-type') {
+            contentType = value;
+          }
+          return this;
+        },
+        status(code) {
+          statusCode = code;
+          return this;
+        },
+        send(html) {
+          responseBody = html;
+          return this;
+        }
+      };
+
+      await indexHandler(req, res);
+      expect(statusCode).toBe(200);
+      expect(contentType).toContain('text/html');
+      expect(responseBody).toContain('NyxGram');
+      expect(responseBody).toContain('logo-wrapper');
+    });
   });
 
   describe('/api/health endpoint', () => {
